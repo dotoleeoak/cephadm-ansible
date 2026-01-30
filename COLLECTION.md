@@ -154,12 +154,18 @@ touch plugins/modules/__init__.py
 touch plugins/__init__.py
 ```
 
-**No code changes needed** - Modules already have conditional imports:
+Modules use conditional imports for backward compatibility:
 ```python
 try:
-    from ansible.module_utils.ceph_common import exit_module, build_base_cmd
+    # Collection import (used when installed as a collection)
+    from ansible_collections.ceph.cephadm.plugins.module_utils.ceph_common import exit_module, build_base_cmd
 except ImportError:
-    from module_utils.ceph_common import exit_module, build_base_cmd
+    try:
+        # Legacy import (used when running directly from repository with Ansible)
+        from ansible.module_utils.ceph_common import exit_module, build_base_cmd
+    except ImportError:
+        # Direct import (used for unit testing with PYTHONPATH setup)
+        from module_utils.ceph_common import exit_module, build_base_cmd
 ```
 
 #### Step 2.2: Move Module Utils
