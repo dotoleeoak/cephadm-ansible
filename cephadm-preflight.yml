@@ -243,7 +243,7 @@
 
             - name: Configure ceph community repository stable key
               ansible.builtin.apt_key:
-                url: "{{ ceph_stable_key }}"
+                url: "{{ ceph_defaults_ceph_stable_key }}"
                 state: present
 
             - name: Configure Ceph community repository
